@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap, distinct, filter, first, firstValueFrom, map, mergeAll, of, Subject, tap, toArray } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { concatMap, distinct, filter, first, firstValueFrom, map, mergeAll, of, 
   templateUrl: './input-test.component.html',
   styleUrls: ['./input-test.component.css']
 })
-export class InputTestComponent implements AfterContentInit {
+export class InputTestComponent implements AfterContentInit, OnDestroy {
 
   query$ = new Subject<string>();
   delta$ = new Subject<number>();
@@ -62,6 +62,9 @@ export class InputTestComponent implements AfterContentInit {
 
   }
 
+  async ngOnDestroy() {
+    clearInterval(this.deltaUpdater);
+  }
 
   //do not remove alter or relocate
   deltaUpdater = setInterval(() => {
